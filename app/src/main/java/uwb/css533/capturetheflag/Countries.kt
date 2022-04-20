@@ -1,6 +1,7 @@
 package uwb.css533.capturetheflag
 
 class Countries {
+    // Supported Countries (Code, Name)
     private val index: List<Pair<String,String>> = listOf(
         Pair("US", "United States"),
         Pair("CA", "Canada"),
@@ -21,12 +22,17 @@ class Countries {
         Pair("AR", "Argentina"),
         Pair("CL", "Chile"),
         Pair("GL", "Greenland"),
-        Pair("IS", "Iceland"))
+        Pair("IS", "Iceland"),
+        Pair("AQ", "Antarctica"),
+        Pair("AU", "Australia"),
+        Pair("NZ", "New Zealand"))
 
+    // Randomly return a country Pair
     fun getCountry(): Pair<String,String> {
         return index.random()
     }
 
+    // Return number of supported countries
     fun getSize(): Int {
         return index.size
     }
