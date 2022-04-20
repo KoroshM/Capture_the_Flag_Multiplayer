@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 val url = "http://www.geognos.com/api/en/countries/flag/" +
                         country.first +
                         ".png"
-                
+
                 Picasso.get().
                     load(url).
                     into(gallery.getChildAt(i) as ImageView)
