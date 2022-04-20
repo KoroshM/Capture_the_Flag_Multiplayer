@@ -22,6 +22,6 @@
     <string name="scan_code">Scan</string>
     <string name="qr_map">Map</string>
     <string name="back">Back</string>
-    <string name="found_session">Room found!\nWaiting for owner to start the game . . .</string>
+    <string name="found_session">Room found!\nWaiting for owner to start . . .</string>
     <string name="score_desc">Score:</string>
 </resources>
