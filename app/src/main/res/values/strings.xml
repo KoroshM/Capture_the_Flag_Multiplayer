@@ -24,4 +24,6 @@
     <string name="back">Back</string>
     <string name="found_session">Room found!\nWaiting for owner to start . . .</string>
     <string name="score_desc">Score:</string>
+    <string name="leaderboard_header">Leaderboard</string>
+    <string name="leaderboard_desc">Top scores for </string>
 </resources>

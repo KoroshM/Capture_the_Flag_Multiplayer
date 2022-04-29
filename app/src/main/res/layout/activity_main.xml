@@ -4,12 +4,269 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/teal_700">
 
-    <include layout="@layout/title_carousel" android:id="@+id/include_main" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:theme="@style/Theme.CaptureTheFlag.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textview_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <uwb.css533.capturetheflag.HorizontalNoScrollView
+        android:id="@+id/horizontalNoScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="60dp"
+        android:fillViewport="true"
+        android:measureAllChildren="false"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <LinearLayout
+            android:id="@+id/linearlayout_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="30dp">
+
+            <ImageView
+                android:id="@+id/i1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i11"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i12"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i13"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i14"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i15"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i16"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i17"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i18"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i19"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+            <ImageView
+                android:id="@+id/i20"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/flag_desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/noodler" />
+
+        </LinearLayout>
+    </uwb.css533.capturetheflag.HorizontalNoScrollView>
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragcontainer_main"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalNoScrollView"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/roll_button"
+        android:id="@+id/button_login"
         android:layout_width="140dp"
         android:layout_height="70dp"
         android:text="@string/start"
