@@ -13,12 +13,12 @@
         android:text="@string/sessionID_desc"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textview_sessionID_display"
+        app:layout_constraintBottom_toTopOf="@+id/frag_textview_sessionID_display"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textview_sessionID_display"
+        android:id="@+id/frag_textview_sessionID_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sessionID_display"
@@ -38,31 +38,20 @@
         android:text="@string/searching_players"
         android:textStyle="bold"
         android:textSize="24sp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_sessionID_display" />
+        app:layout_constraintTop_toBottomOf="@+id/frag_textview_sessionID_display" />
 
     <Button
-        android:id="@+id/button_start"
+        android:id="@+id/frag_button_start"
         android:layout_width="140dp"
         android:layout_height="70dp"
         android:text="@string/start_game"
         android:textColor="@color/white"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_searching" />
-
-    <Button
-        android:id="@+id/button_return"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/back"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

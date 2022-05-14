@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/teal_700">
@@ -58,46 +59,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_time" />
 
-    <ImageView
-        android:id="@+id/game_cur_color"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:contentDescription="@string/cur_color_desc"
-        android:src="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ImageView
-        android:id="@+id/game_cur_pat"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:contentDescription="@string/cur_pat_desc"
-        android:src="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <ImageView
-        android:id="@+id/game_cur_flag"
-        android:layout_width="140dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="24dp"
-        android:contentDescription="@string/cur_pat_desc"
-        android:src="@color/purple_500"
+    <ListView
+        android:id="@+id/listview_qrlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@id/divider"/>
 
     <Button
         android:id="@+id/button_scan"
         android:layout_width="140dp"
         android:layout_height="70dp"
-        android:layout_marginTop="30dp"
         android:text="@string/scan_code"
         android:textColor="@color/white"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_return"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/game_cur_flag" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_map"

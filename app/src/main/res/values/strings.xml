@@ -14,7 +14,7 @@
     <string name="sessionID_display">00000</string>
     <string name="sessionID_desc">Your Room ID is:</string>
     <string name="searching_players">Searching for co-op player . . .</string>
-    <string name="start_game">Begin Game</string>
+    <string name="start_game">Start Game</string>
     <string name="placeholder_country">Country</string>
     <string name="time">00 : 00 : 00</string>
     <string name="cur_color_desc">Currently selected color</string>
