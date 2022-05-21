@@ -1,6 +1,7 @@
 package uwb.css533.capturetheflag
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 
 class LoginFragment(private val model: MyViewModel) : Fragment()  {
 
+    private val TAG = "Login"
     private var userField: EditText? = null
     private var passField: EditText? = null
     private var btnLogin: Button? = null
@@ -24,6 +26,7 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i(TAG,"Entering Login Fragment")
         // Inflate the layout for this fragment
         val returnView = inflater.inflate(R.layout.login_screen, container, false)
         userField = returnView.findViewById<EditText>(R.id.frag_edittext_username)
@@ -31,10 +34,10 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
         btnLogin = returnView.findViewById<Button>(R.id.frag_button_login)
 
         btnLogin?.setOnClickListener {
-            model.setSignedIn(login())
+            login()
 
             if(model.auth.equals(false)){
-                Toast.makeText(activity, "Login failed.", Toast.LENGTH_SHORT).show()
+                Log.e(TAG,"Login failed.")
             } else {
                 val navLogin = activity as FragmentNavigation
                 navLogin.replaceFragment(SignedInFragment(model))
@@ -44,17 +47,22 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
         return returnView
     }
 
-    private fun login(): Boolean {
-        val userText = userField?.text
-        val passText = passField?.text
+    private fun login() {
+        val userText = userField?.text.toString()
+        val passText = passField?.text.toString()
 
-        if(userText == null || passText == null) {
+        if(userText == "null" || passText == "null") {
             Toast.makeText(activity,"Please enter a username and password.",Toast.LENGTH_SHORT).show()
+            return
         }
 
         // TODO: Implement login functionality
-        val response = "Successfully logged in."
+        val response = "123456"
+        val success = response.toInt() > 0
 
-        return response == "Successfully logged in."
+        if(success) {
+            model.setUser(User(userText, passText, response))
+        }
+        model.setSignedIn(success)
     }
 }

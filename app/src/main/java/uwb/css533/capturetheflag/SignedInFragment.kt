@@ -1,6 +1,7 @@
 package uwb.css533.capturetheflag
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 
 class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activity_signedin)  {
 
+    private val TAG = "SignedIn"
     private var btnCreate: Button? = null
     private var btnJoin: Button? = null
 
@@ -19,6 +21,7 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i(TAG,"Entering SignedIn Fragment")
         // Inflate the layout for this fragment
         val returnView = inflater.inflate(R.layout.activity_signedin, container, false)
         btnCreate = returnView.findViewById<Button>(R.id.frag_button_create)
@@ -27,7 +30,7 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
         btnCreate?.setOnClickListener {
             val roomCode = createRoom(model.getUser())
             if(roomCode.startsWith("-")) {
-                Toast.makeText(activity, "Unable to create room.", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Unable to create room.")
 
             } else {
                 val navLogin = activity as FragmentNavigation

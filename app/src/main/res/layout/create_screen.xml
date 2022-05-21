@@ -20,19 +20,20 @@
 
     <TextView
         android:id="@+id/frag_textview_sessionID_display"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:background="@color/black"
         android:text="@string/sessionID_display"
         android:textColor="@color/white"
         android:textSize="50sp"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/frag_button_start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textview_searching"
+        android:id="@+id/frag_textview_searching"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"

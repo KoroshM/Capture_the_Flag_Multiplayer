@@ -6,50 +6,110 @@
     android:layout_height="match_parent"
     android:background="@color/teal_700">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:theme="@style/Theme.CaptureTheFlag.AppBarOverlay"
+    <TextView
+        android:id="@+id/textview_time2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_placeholder"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textview_flag_country"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/placeholder_country"
-            android:textColor="@color/white"
-            android:textSize="34sp"
-            android:textStyle="bold" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <ImageView
-        android:id="@+id/game_flag"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/flag_desc"
-        android:src="@drawable/noodler"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/textview_time"
+        android:id="@+id/frag_textview_qr2_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_placeholder"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_time2" />
+
+    <TextView
+        android:id="@+id/textview_time3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_placeholder"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textview_time2"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/frag_textview_qr3_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_placeholder"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textview_time2"
+        app:layout_constraintTop_toBottomOf="@+id/textview_time3" />
+
+    <TextView
+        android:id="@+id/textview_time4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_placeholder"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/textview_time2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/frag_textview_qr1_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_placeholder"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/textview_time2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_time4" />
+
+    <ImageView
+        android:id="@+id/frag_imageview_flag"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:contentDescription="@string/flag_desc"
+        android:src="@drawable/noodler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/frag_textview_country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder_country"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frag_imageview_flag" />
+
+    <TextView
+        android:id="@+id/frag_textview_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/time"
-        android:textSize="70sp"
+        android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_flag" />
+        app:layout_constraintTop_toBottomOf="@+id/frag_imageview_flag" />
 
     <View
         android:id="@+id/divider"
@@ -57,49 +117,73 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_time" />
+        app:layout_constraintTop_toBottomOf="@+id/frag_textview_time" />
 
-    <ListView
-        android:id="@+id/listview_qrlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+    <View
+        style="@style/Theme.CaptureTheFlag.Divider"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider"/>
+        app:layout_constraintTop_toBottomOf="@+id/frag_textview_time" />
+
+    <View
+        style="@style/Theme.CaptureTheFlag.Divider"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frag_textview_time" />
+
+    <View
+        android:id="@+id/frag_qr2_slash"
+        style="@style/Theme.CaptureTheFlag.Divider"
+        android:layout_width="100dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/frag_textview_qr2_code"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/frag_textview_qr2_code" />
+
+    <View
+        android:id="@+id/frag_qr1_slash"
+        style="@style/Theme.CaptureTheFlag.Divider"
+        android:layout_width="100dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/frag_textview_qr1_code"
+        app:layout_constraintEnd_toEndOf="@+id/frag_textview_qr1_code"
+        app:layout_constraintStart_toStartOf="@+id/frag_textview_qr1_code"
+        app:layout_constraintTop_toTopOf="@+id/frag_textview_qr1_code" />
+
+    <View
+        android:id="@+id/frag_qr3_slash"
+        style="@style/Theme.CaptureTheFlag.Divider"
+        android:layout_width="100dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/frag_textview_qr3_code"
+        app:layout_constraintEnd_toEndOf="@+id/frag_textview_qr3_code"
+        app:layout_constraintStart_toStartOf="@+id/frag_textview_qr3_code"
+        app:layout_constraintTop_toTopOf="@+id/frag_textview_qr3_code" />
 
     <Button
-        android:id="@+id/button_scan"
-        android:layout_width="140dp"
-        android:layout_height="70dp"
+        android:id="@+id/frag_button_scan"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/scan_code"
         android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_return"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_map"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/qr_map"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button_return"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/back"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

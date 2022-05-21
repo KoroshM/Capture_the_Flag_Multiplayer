@@ -1,7 +1,5 @@
 package uwb.css533.capturetheflag
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -11,9 +9,8 @@ import android.widget.LinearLayout
 import com.squareup.picasso.Picasso
 
 object Backend {
-    private const val CAROUSEL_FLAGS = 20
     private const val TAG = "Backend"
-    private val countries = Countries()             // Class with pre-made list of countries
+    private val atlas = Atlas()             // Class with pre-made list of countries
     private var autoscroll: Animation? = null               // Animator for flag carousel
 
     // Initialize
@@ -58,27 +55,36 @@ object Backend {
     // Set carousel images from World Countries API
     fun setFlagImages(gallery: LinearLayout) {
         // Track countries loaded into carousel
-        val carousel: MutableList<Pair<String,String>> = mutableListOf()
+        val carousel: MutableList<Country> = mutableListOf()
         var i = 0
 
         // Fill carousel
         while(carousel.size < gallery.childCount) {
             // Get a random country
-            val country = countries.getCountry()
+            val country = atlas.getRandom()
             // If not in carousel, add its flag
             if(!carousel.contains(country)) {
                 carousel.add(country)
-                val url = "http://www.geognos.com/api/en/countries/flag/" +
-                        country.first +
-                        ".png"
-
-                Picasso.get().
-                load(url).
-                into(gallery.getChildAt(i) as ImageView)
+                setFlag(gallery.getChildAt(i) as ImageView, country)
                 i++
-                Log.i(TAG, "Flag being set for: " + country.second)
             }
         }
+    }
+
+    fun setFlag(imgV: ImageView?, country: Country?) {
+        if(imgV == null || country == null) {
+            Log.e(TAG,"Failed to set flag image for game.")
+            return
+        }
+        val url = "http://www.geognos.com/api/en/countries/flag/" +
+                country.getCode() +
+                ".png"
+
+        Picasso.get()
+            .load(url)
+            .into(imgV)
+
+        Log.i(TAG, "Flag being set for: " + country.getName())
     }
 
     // Autoscroll the carousel flags
