@@ -1,6 +1,8 @@
 package uwb.css533.capturetheflag
 
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class LoginFragment(private val model: MyViewModel) : Fragment()  {
@@ -50,6 +54,11 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
     private fun login() {
         val userText = userField?.text.toString()
         val passText = passField?.text.toString()
+        val policy = ThreadPolicy
+            .Builder()
+            .permitAll()
+            .build()
+        StrictMode.setThreadPolicy(policy)
 
         if(userText == "null" || passText == "null") {
             Toast.makeText(activity,"Please enter a username and password.",Toast.LENGTH_SHORT).show()
@@ -57,11 +66,31 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
         }
 
         // TODO: Implement login functionality
-        val response = "123456"
-        val success = response.toInt() > 0
+        val url = URL("http://localhost:8080/capture_the_flag/new_user?username=" + userText
+                + "&password=" + passText)
+//        val url = URL("https://httpbin.org/anything?id=54321")
+        val response = StringBuffer()
+
+        with(url.openConnection() as HttpURLConnection) {
+            requestMethod = "GET"  // optional default is GET
+
+            Log.i(TAG,"Sent 'GET' request to URL : $url; Response Code : $responseCode")
+
+            inputStream.bufferedReader().use {
+                var inputLine = it.readLine()
+                while (inputLine != null) {
+                    response.append(inputLine)
+                    inputLine = it.readLine()
+                }
+                Log.i(TAG,"Response : $response")
+            }
+        }
+//        val response = "123456"
+//        val success = response.toString().toInt() > 0
+        val success = true
 
         if(success) {
-            model.setUser(User(userText, passText, response))
+            model.setUser(User(userText, passText, response.toString()))
         }
         model.setSignedIn(success)
     }

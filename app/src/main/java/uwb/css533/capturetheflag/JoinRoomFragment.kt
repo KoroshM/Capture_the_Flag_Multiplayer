@@ -27,16 +27,4 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
         roomCodeField = returnView.findViewById<EditText>(R.id.frag_edittext_sessionID)
         return returnView
     }
-
-    fun getSearchButton(): Button? {
-        return btnSearch
-    }
-
-    fun getFoundText(): TextView? {
-        return textRoomFound
-    }
-
-    fun getCodeField(): EditText? {
-        return roomCodeField
-    }
 }

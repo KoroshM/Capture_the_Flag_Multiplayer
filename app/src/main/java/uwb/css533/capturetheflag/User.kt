@@ -8,7 +8,7 @@ class User(user: String, pass: String, id: String) {
     private val password: String = pass
     private val userId: String = id
 
-    fun getUser(): String {
+    fun getUsername(): String {
         return username
     }
 

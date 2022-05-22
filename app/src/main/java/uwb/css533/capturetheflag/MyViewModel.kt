@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 class MyViewModel : ViewModel() {
 
     private var user: User? = null
-
     private var _auth = MutableLiveData(false)
     var auth: LiveData<Boolean> = _auth
 
