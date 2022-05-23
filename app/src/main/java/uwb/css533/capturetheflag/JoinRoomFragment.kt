@@ -30,13 +30,12 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
         Log.i(TAG,"Entering Join Fragment")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.activity_signedin, container, false)
-        roomId = view.findViewById<EditText>(R.id.frag_edittext_sessionID)
-        btnSearch = view.findViewById<Button>(R.id.frag_button_search)
-        textFound = view.findViewById<TextView>(R.id.frag_textview_found)
+        roomId = view.findViewById(R.id.frag_edittext_sessionID)
+        btnSearch = view.findViewById(R.id.frag_button_search)
+        textFound = view.findViewById(R.id.frag_textview_found)
 
         btnSearch?.setOnClickListener {
             val roomCode = roomId?.text
-            lateinit var lines: List<String>
             if(roomCode != null) {
                 // Join room
                 val url = URL("http://" +
@@ -71,7 +70,7 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
                  * (QR)Feature3
                  * (Start time)
                  */
-                lines = response.lines()
+                val lines = response.split(",").toTypedArray()
 
                 val navLogin = activity as FragmentNavigation
                 navLogin.replaceFragment(GameFragment(model,
@@ -79,12 +78,10 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
                     lines[1],
                     lines[2],
                     lines[3],
-                    lines[4],
-                    roomCode.toString()))
-            } else {
-                Log.e(TAG, "Error joining room: null code")
+                    lines[4].toLong()))
             }
 
+            Log.e(TAG, "Error joining room: null room code input")
             Toast.makeText(activity,"Invalid room code, please try again.",Toast.LENGTH_SHORT).show()
         }
 

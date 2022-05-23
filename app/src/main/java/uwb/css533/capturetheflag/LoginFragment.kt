@@ -33,9 +33,11 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
         Log.i(TAG,"Entering Login Fragment")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.login_screen, container, false)
-        userField = view.findViewById<EditText>(R.id.frag_edittext_username)
-        passField = view.findViewById<EditText>(R.id.frag_edittext_password)
-        btnLogin = view.findViewById<Button>(R.id.frag_button_login)
+        model.clearSessionId()
+        model.clearUser()
+        userField = view.findViewById(R.id.frag_edittext_username)
+        passField = view.findViewById(R.id.frag_edittext_password)
+        btnLogin = view.findViewById(R.id.frag_button_login)
 
         btnLogin?.setOnClickListener {
             login()
@@ -49,6 +51,12 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
         }
 
         return view
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        model.clearSessionId()
+        model.clearUser()
     }
 
     private fun login() {
@@ -87,7 +95,7 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
                 Log.i(TAG,"Response : $response")
             }
         }
-        val success = response.toString().toInt() > 0
+        val success = response.toString().toInt() >= 0
 
         if(success) {
             model.setUser(User(userText, passText, response.toString()))

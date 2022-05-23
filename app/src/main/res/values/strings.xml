@@ -28,4 +28,6 @@
     <string name="leaderboard_header">Leaderboard</string>
     <string name="leaderboard_desc">Top scores for </string>
     <string name="qr_placeholder">QR</string>
+    <string name="top_score_desc">Best Time</string>
+    <string name="win_score_desc">Winning Time</string>
 </resources>

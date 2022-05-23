@@ -12,7 +12,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-class CreateRoomFragment(private val model: MyViewModel, private val roomCode: String) : Fragment(R.layout.create_screen)  {
+class CreateRoomFragment(private val model: MyViewModel) : Fragment(R.layout.create_screen)  {
 
     private val TAG = "CreateRoom"
     private var textCodeDisplay: TextView? = null
@@ -27,35 +27,33 @@ class CreateRoomFragment(private val model: MyViewModel, private val roomCode: S
         // Inflate the layout for this fragment
         val returnView = inflater.inflate(R.layout.create_screen, container, false)
         textCodeDisplay = returnView.findViewById<Button>(R.id.frag_textview_sessionID_display)
-        textSearching = returnView.findViewById<TextView>(R.id.frag_textview_searching)
-        btnStart = returnView.findViewById<Button>(R.id.frag_button_start)
+        textSearching = returnView.findViewById(R.id.frag_textview_searching)
+        btnStart = returnView.findViewById(R.id.frag_button_start)
 
-        textCodeDisplay?.text = roomCode
+        textCodeDisplay?.text = model.getSessionId()
         btnStart?.visibility = View.VISIBLE
 
         btnStart?.setOnClickListener {
-            lateinit var lines: List<String>
-
-            val urlStart = URL("http://" +
+            val url = URL("http://" +
                     model.getIP() + ":" +
                     model.getPort() +
                     "/capture_the_flag/start_game?" +
                     "user_id=" + model.getUser()?.getId() +
-                    "&session_id=" + roomCode)
-            val responseStart = StringBuffer()
+                    "&session_id=" + model.getSessionId())
+            val response = StringBuffer()
 
-            with(urlStart.openConnection() as HttpURLConnection) {
+            with(url.openConnection() as HttpURLConnection) {
                 requestMethod = "GET"  // optional default is GET
 
-                Log.i(TAG,"Sent 'GET' request to URL : $urlStart; Response Code : $responseCode")
+                Log.i(TAG,"Sent 'GET' request to URL : $url; Response Code : $responseCode")
 
                 inputStream.bufferedReader().use {
                     var inputLine = it.readLine()
                     while (inputLine != null) {
-                        responseStart.append(inputLine)
+                        response.append(inputLine)
                         inputLine = it.readLine()
                     }
-                    Log.i(TAG,"Response : $responseStart")
+                    Log.i(TAG,"Response : $response")
                 }
             }
 
@@ -66,7 +64,7 @@ class CreateRoomFragment(private val model: MyViewModel, private val roomCode: S
              * (QR3)Feature3
              * (Start time)
              */
-            lines = responseStart.lines()
+            val lines = response.split(",").toTypedArray()
 
             val navLogin = activity as FragmentNavigation
             navLogin.replaceFragment(GameFragment(model,
@@ -74,8 +72,7 @@ class CreateRoomFragment(private val model: MyViewModel, private val roomCode: S
                 lines[1],
                 lines[2],
                 lines[3],
-                lines[4],
-                roomCode))
+                lines[4].toLong()))
         }
 
         return returnView

@@ -25,25 +25,20 @@ class Atlas {
         Country("IS", "Iceland"),
         Country("AQ", "Antarctica"),
         Country("AU", "Australia"),
-        Country("NZ", "New Zealand"))
+        Country("NZ", "New Zealand"),
+        Country("FR", "France"),
+        Country("NL", "Netherlands"),
+        Country("RU","Russia"))
 
     // Randomly return a country Pair
     fun getRandom(): Country {
         return atlas.random()
     }
 
-    // Return number of supported countries
-    fun getSize(): Int {
-        return atlas.size
-    }
-
     fun get(country: String): Country? {
-        var i = 0
-        while(i < atlas.size) {
-            if(atlas[i].getName() == country || atlas[i].getCode() == country){
-                return atlas[i]
-            }
-            i++
+        for(item in atlas) {
+            if(item.getCode() == country || item.getName() == country)
+                return item
         }
         return null
     }

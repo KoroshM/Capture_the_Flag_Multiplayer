@@ -33,8 +33,7 @@ class GameFragment(private val model: MyViewModel,
                    private val feat1: String,
                    private val feat2: String,
                    private val feat3: String,
-                   private val startTime: String,
-                   private val roomCode: String) : Fragment(R.layout.game)  {
+                   private val startTime: Long) : Fragment(R.layout.game)  {
 
     private val TAG = "Game"
     private var textCountry: TextView? = null
@@ -62,7 +61,7 @@ class GameFragment(private val model: MyViewModel,
     private var mTimerHandler: Runnable = object : Runnable {
         override fun run() {
             try {
-                updateStopWatchView(System.currentTimeMillis() - startTime.toLong())
+                updateStopWatchView(System.currentTimeMillis() - startTime)
             } finally {
                 mHandler!!.postDelayed(this, timerInterval)
             }
@@ -78,17 +77,17 @@ class GameFragment(private val model: MyViewModel,
         val atlas = Atlas()
         val country = atlas.get(flag)
 
-        textCountry = view.findViewById<TextView>(R.id.frag_textview_country)
-        btnScan = view.findViewById<Button>(R.id.frag_button_scan)
-        imgFlag = view.findViewById<ImageView>(R.id.frag_imageview_flag)
-        textTime = view.findViewById<TextView>(R.id.frag_textview_time)
+        textCountry = view.findViewById(R.id.frag_textview_country)
+        btnScan = view.findViewById(R.id.frag_button_scan)
+        imgFlag = view.findViewById(R.id.frag_imageview_flag)
+        textTime = view.findViewById(R.id.frag_textview_time)
 
-        textQr1 = view.findViewById<TextView>(R.id.frag_textview_qr1_code)
-        textQr2 = view.findViewById<TextView>(R.id.frag_textview_qr2_code)
-        textQr3 = view.findViewById<TextView>(R.id.frag_textview_qr3_code)
-        qr1Slash = view.findViewById<View>(R.id.frag_qr1_slash)
-        qr2Slash = view.findViewById<View>(R.id.frag_qr2_slash)
-        qr3Slash = view.findViewById<View>(R.id.frag_qr3_slash)
+        textQr1 = view.findViewById(R.id.frag_textview_qr1_code)
+        textQr2 = view.findViewById(R.id.frag_textview_qr2_code)
+        textQr3 = view.findViewById(R.id.frag_textview_qr3_code)
+        qr1Slash = view.findViewById(R.id.frag_qr1_slash)
+        qr2Slash = view.findViewById(R.id.frag_qr2_slash)
+        qr3Slash = view.findViewById(R.id.frag_qr3_slash)
 
         if(country == null) {
             Log.e(TAG,"Error loading flag from server.")
@@ -139,7 +138,7 @@ class GameFragment(private val model: MyViewModel,
                 model.getIP() + ":" +
                 model.getPort() +
                 "/capture_the_flag/check_feature?" +
-                "session_id=" + roomCode +
+                "session_id=" + model.getSessionId() +
                 "&user_id=" + model.getUser()?.getId() +
                 "&feature=" + qr)
         val response = StringBuffer()
@@ -179,7 +178,7 @@ class GameFragment(private val model: MyViewModel,
                 model.getIP() + ":" +
                 model.getPort() +
                 "/capture_the_flag/end_game?" +
-                "session_id=" + roomCode)
+                "session_id=" + model.getSessionId())
         val response = StringBuffer()
 
         with(urlStart.openConnection() as HttpURLConnection) {
@@ -196,11 +195,15 @@ class GameFragment(private val model: MyViewModel,
                 Log.i(TAG,"Response : $response")
             }
         }
-        if(response.toString().toInt() > 0) {
+        val lines = response.split(",").toTypedArray()
+        if(lines[0].toInt() > 0) {
             // Game has ended
             mHandler?.removeCallbacks(mTimerHandler)
             val navLogin = activity as FragmentNavigation
-            navLogin.replaceFragment(LeaderboardFragment(model, finalTime, roomCode))
+            navLogin.replaceFragment(LeaderboardFragment(model,
+                lines[0].toLong() - startTime,
+                lines[1].toLong() - startTime,
+                finalTime - startTime))
         }
     }
 

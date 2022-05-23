@@ -25,17 +25,19 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
         Log.i(TAG,"Entering SignedIn Fragment")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.activity_signedin, container, false)
-        btnCreate = view.findViewById<Button>(R.id.frag_button_create)
-        btnJoin = view.findViewById<Button>(R.id.frag_button_join)
+        btnCreate = view.findViewById(R.id.frag_button_create)
+        btnJoin = view.findViewById(R.id.frag_button_join)
 
         btnCreate?.setOnClickListener {
             val roomCode = createRoom(model.getUser())
             if(roomCode.startsWith("-")) {
                 Log.e(TAG, "Unable to create room.")
+                model.clearSessionId()
 
             } else {
+                model.setSessionId(roomCode)
                 val navLogin = activity as FragmentNavigation
-                navLogin.replaceFragment(CreateRoomFragment(model, roomCode))
+                navLogin.replaceFragment(CreateRoomFragment(model))
             }
         }
 
@@ -45,6 +47,11 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
         }
 
         return view
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        model.clearSessionId()
     }
 
     private fun createRoom(user: User?): String {

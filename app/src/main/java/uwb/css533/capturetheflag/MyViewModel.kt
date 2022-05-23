@@ -13,10 +13,6 @@ class MyViewModel(private val ip: String, private val port: Int) : ViewModel() {
     private var _auth = MutableLiveData(false)
     var auth: LiveData<Boolean> = _auth
 
-    fun setUser(newUser: User) {
-        user = newUser
-    }
-
     fun setSignedIn(newValue : Boolean) {
         _auth.postValue(newValue)
     }
@@ -33,8 +29,16 @@ class MyViewModel(private val ip: String, private val port: Int) : ViewModel() {
         return room
     }
 
+    fun setUser(newUser: User) {
+        user = newUser
+    }
+
     fun getUser(): User? {
         return user
+    }
+
+    fun clearUser() {
+        user = null
     }
 
     fun getIP(): String {
