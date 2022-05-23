@@ -11,10 +11,13 @@ import uwb.css533.capturetheflag.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), FragmentNavigation {
 
+    private val IP = "localhost"
+    private val PORT = 8080
     private val TAG = "MainActivity"
-    private lateinit var binding: ActivityMainBinding       // Easily access UI elements
+
+    private lateinit var binding: ActivityMainBinding           // Easily access UI elements
     private var fragment: Fragment? = null                      // Currently loaded fragment
-    private val viewModel = MyViewModel()
+    private val viewModel = MyViewModel(IP, PORT)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)                      // Required setup
@@ -48,16 +51,5 @@ class MainActivity : AppCompatActivity(), FragmentNavigation {
             .addToBackStack(null)
             .setReorderingAllowed(true)
             .commit()
-    }
-
-    fun printToast(msg: String, long: Boolean) {
-        val len = if (!long) Toast.LENGTH_SHORT else Toast.LENGTH_LONG
-        runOnUiThread {
-            Toast.makeText(
-                this@MainActivity,
-                msg,
-                len)
-                .show()
-        }
     }
 }

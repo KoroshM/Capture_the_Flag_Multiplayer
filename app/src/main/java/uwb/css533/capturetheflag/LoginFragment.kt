@@ -32,10 +32,10 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
     ): View? {
         Log.i(TAG,"Entering Login Fragment")
         // Inflate the layout for this fragment
-        val returnView = inflater.inflate(R.layout.login_screen, container, false)
-        userField = returnView.findViewById<EditText>(R.id.frag_edittext_username)
-        passField = returnView.findViewById<EditText>(R.id.frag_edittext_password)
-        btnLogin = returnView.findViewById<Button>(R.id.frag_button_login)
+        val view = inflater.inflate(R.layout.login_screen, container, false)
+        userField = view.findViewById<EditText>(R.id.frag_edittext_username)
+        passField = view.findViewById<EditText>(R.id.frag_edittext_password)
+        btnLogin = view.findViewById<Button>(R.id.frag_button_login)
 
         btnLogin?.setOnClickListener {
             login()
@@ -48,7 +48,7 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
             }
         }
 
-        return returnView
+        return view
     }
 
     private fun login() {
@@ -65,10 +65,12 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
             return
         }
 
-        // TODO: Implement login functionality
-        val url = URL("http://localhost:8080/capture_the_flag/new_user?username=" + userText
-                + "&password=" + passText)
-//        val url = URL("https://httpbin.org/anything?id=54321")
+        val url = URL("http://" +
+                model.getIP() + ":" +
+                model.getPort() +
+                "/capture_the_flag/login?" +
+                "username=" + userText +
+                "&password=" + passText)
         val response = StringBuffer()
 
         with(url.openConnection() as HttpURLConnection) {
@@ -85,9 +87,7 @@ class LoginFragment(private val model: MyViewModel) : Fragment()  {
                 Log.i(TAG,"Response : $response")
             }
         }
-//        val response = "123456"
-//        val success = response.toString().toInt() > 0
-        val success = true
+        val success = response.toString().toInt() > 0
 
         if(success) {
             model.setUser(User(userText, passText, response.toString()))

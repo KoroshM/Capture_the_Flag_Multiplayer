@@ -6,8 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MyViewModel : ViewModel() {
+class MyViewModel(private val ip: String, private val port: Int) : ViewModel() {
 
+    private var room: String? = null
     private var user: User? = null
     private var _auth = MutableLiveData(false)
     var auth: LiveData<Boolean> = _auth
@@ -17,11 +18,30 @@ class MyViewModel : ViewModel() {
     }
 
     fun setSignedIn(newValue : Boolean) {
-        // use postvalue() to make the assignation on the main (UI) thread
         _auth.postValue(newValue)
+    }
+
+    fun setSessionId(newValue: String) {
+        room = newValue
+    }
+
+    fun clearSessionId() {
+        room = null
+    }
+
+    fun getSessionId(): String? {
+        return room
     }
 
     fun getUser(): User? {
         return user
+    }
+
+    fun getIP(): String {
+        return ip
+    }
+
+    fun getPort(): String {
+        return port.toString()
     }
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/teal_700">
@@ -12,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/qr_placeholder"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/qr_placeholder"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +35,7 @@
         android:layout_height="wrap_content"
         android:text="@string/qr_placeholder"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textview_time2"
@@ -48,7 +47,7 @@
         android:layout_height="wrap_content"
         android:text="@string/qr_placeholder"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textview_time2"
@@ -60,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text="@string/qr_placeholder"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textview_time2"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +71,7 @@
         android:layout_height="wrap_content"
         android:text="@string/qr_placeholder"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textview_time2"
         app:layout_constraintStart_toStartOf="parent"
@@ -136,7 +135,7 @@
     <View
         android:id="@+id/frag_qr2_slash"
         style="@style/Theme.CaptureTheFlag.Divider"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/frag_textview_qr2_code"
         app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +145,7 @@
     <View
         android:id="@+id/frag_qr1_slash"
         style="@style/Theme.CaptureTheFlag.Divider"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/frag_textview_qr1_code"
         app:layout_constraintEnd_toEndOf="@+id/frag_textview_qr1_code"
@@ -156,7 +155,7 @@
     <View
         android:id="@+id/frag_qr3_slash"
         style="@style/Theme.CaptureTheFlag.Divider"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/frag_textview_qr3_code"
         app:layout_constraintEnd_toEndOf="@+id/frag_textview_qr3_code"
@@ -167,23 +166,11 @@
         android:id="@+id/frag_button_scan"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/scan_code"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_map"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/qr_map"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frag_textview_qr2_code" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

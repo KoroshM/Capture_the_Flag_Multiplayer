@@ -4,6 +4,19 @@ plugins {
 }
 
 android {
+    sourceSets {
+        main {
+            java {
+                exclude '**/Interfaces.java'
+            }
+        }
+        androidTest {
+            java {
+                exclude '**/Interfaces.java'
+            }
+        }
+    }
+
     compileSdk 31
 
     defaultConfig {

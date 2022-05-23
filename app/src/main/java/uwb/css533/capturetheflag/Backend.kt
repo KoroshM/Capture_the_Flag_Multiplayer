@@ -10,46 +10,13 @@ import com.squareup.picasso.Picasso
 
 object Backend {
     private const val TAG = "Backend"
-    private val atlas = Atlas()             // Class with pre-made list of countries
-    private var autoscroll: Animation? = null               // Animator for flag carousel
+    private val atlas = Atlas()                 // Class with pre-made list of countries
+    private var autoscroll: Animation? = null   // Animator for flag carousel
 
     // Initialize
     fun initialize() : Backend {
-        // Do any setup needed before starting any auth tasks
+        // Eventually automatically log in the user based on saved credentials
         return this
-    }
-
-    // Set user sign-in status
-    private fun updateUserData(withSignedInStatus : Boolean) {
-        UserData.setSignedIn(withSignedInStatus)
-    }
-
-    // Sign user out
-    fun signOut() {
-        Log.i(TAG, "Initiate Signout Sequence")
-
-        val success = true // API_CALL_SIGNOUT HERE
-        if(success) {
-            Log.i(TAG, "Signed out!")
-            UserData.setSignedIn(false)
-        }
-        else {
-            Log.i(TAG, "Error signing out.")
-        }
-    }
-
-    // Sign user in
-    fun signIn() {
-        Log.i(TAG, "Initiate Signin Sequence")
-
-        val success = true // API_CALL_SIGNIN HERE
-        if(success) {
-            Log.i(TAG, "Signed in!")
-            UserData.setSignedIn(true)
-        }
-        else {
-            Log.i(TAG, "Error signing in.")
-        }
     }
 
     // Set carousel images from World Countries API
@@ -71,6 +38,7 @@ object Backend {
         }
     }
 
+    // Set an individual flag on an ImageView
     fun setFlag(imgV: ImageView?, country: Country?) {
         if(imgV == null || country == null) {
             Log.e(TAG,"Failed to set flag image for game.")

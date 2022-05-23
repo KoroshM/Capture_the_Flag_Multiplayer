@@ -5,6 +5,7 @@ import android.icu.util.TimeUnit
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,8 @@ import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
 import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
+import java.net.HttpURLConnection
+import java.net.URL
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -25,7 +28,13 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-class GameFragment(private val model: MyViewModel, private val startTime: String) : Fragment(R.layout.game)  {
+class GameFragment(private val model: MyViewModel,
+                   private val flag: String,
+                   private val feat1: String,
+                   private val feat2: String,
+                   private val feat3: String,
+                   private val startTime: String,
+                   private val roomCode: String) : Fragment(R.layout.game)  {
 
     private val TAG = "Game"
     private var textCountry: TextView? = null
@@ -39,15 +48,16 @@ class GameFragment(private val model: MyViewModel, private val startTime: String
     private var qr1Slash: View? = null
     private var qr2Slash: View? = null
     private var qr3Slash: View? = null
+    private var qr1: String? = null
+    private var qr2: String? = null
+    private var qr3: String? = null
     private var scan1 = false
     private var scan2 = false
     private var scan3 = false
-    private var qr1 = "0"
-    private var qr2 = "0"
-    private var qr3 = "0"
 
     private val timerInterval = 1000L // Timer update in ms
     private var mHandler: Handler? = null
+    private var finalTime = Long.MAX_VALUE
 
     private var mTimerHandler: Runnable = object : Runnable {
         override fun run() {
@@ -66,9 +76,6 @@ class GameFragment(private val model: MyViewModel, private val startTime: String
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.game, container, false)
         val atlas = Atlas()
-
-        // TODO: Request country
-        val flag = "US"
         val country = atlas.get(flag)
 
         textCountry = view.findViewById<TextView>(R.id.frag_textview_country)
@@ -92,27 +99,12 @@ class GameFragment(private val model: MyViewModel, private val startTime: String
             startClock()
         }
 
-        while(qr1 <= "0" || qr2 <= "0" || qr3 <= "0") { // --------------------- Return -1 on error
-            if(qr1 <= "0") {
-                // TODO: Request QR code 1
-                val response = "1"
-                qr1 = response
-            }
-            if(qr2 <= "0") {
-                // TODO: Request QR code 2
-                val response = "2"
-                qr2 = response
-            }
-            if(qr3 <= "0") {
-                // TODO: Request QR code 3
-                val response = "3"
-                qr3 = response
-            }
-        }
-
-        textQr1?.text = qr1.toString()
-        textQr2?.text = qr2.toString()
-        textQr3?.text = qr3.toString()
+        qr1 = feat1[0].toString()
+        qr2 = feat2[0].toString()
+        qr3 = feat3[0].toString()
+        textQr1?.text = qr1
+        textQr2?.text = qr2
+        textQr3?.text = qr3
 
         startClock()
         btnScan?.setOnClickListener {
@@ -135,37 +127,81 @@ class GameFragment(private val model: MyViewModel, private val startTime: String
                 Log.i(TAG,"Scan contents: " + result.contents)
                 Toast.makeText(activity, "scanned: " + result.contents, Toast.LENGTH_LONG).show()
 
-                // TODO: Check if scanned code is correct
-                val response = "QR code received" // ---------------------------- Placeholder response
-                updateClientGame()
+                updateClientGame(result.contents as String)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    private fun updateClientGame() {
-        // TODO: Implement game state heartbeat
-        // 101 = codes 1 and 3 acquired, etc
-        val result = "110"
+    private fun updateClientGame(qr: String) {
+        val urlStart = URL("http://" +
+                model.getIP() + ":" +
+                model.getPort() +
+                "/capture_the_flag/check_feature?" +
+                "session_id=" + roomCode +
+                "&user_id=" + model.getUser()?.getId() +
+                "&feature=" + qr)
+        val response = StringBuffer()
 
-        scan1 = result[0] == '1'
-        scan2 = result[1] == '1'
-        scan3 = result[2] == '1'
+        with(urlStart.openConnection() as HttpURLConnection) {
+            requestMethod = "GET"  // optional default is GET
+
+            Log.i(TAG,"Sent 'GET' request to URL : $urlStart; Response Code : $responseCode")
+
+            inputStream.bufferedReader().use {
+                var inputLine = it.readLine()
+                while (inputLine != null) {
+                    response.append(inputLine)
+                    inputLine = it.readLine()
+                }
+                Log.i(TAG,"Response : $response")
+            }
+        }
+
+        when (response.toString()) {
+            qr1 -> scan1 = true
+            qr2 -> scan2 = true
+            qr3 -> scan3 = true
+        }
+        qr1Slash?.visibility = if(scan1) View.VISIBLE else View.INVISIBLE
+        qr2Slash?.visibility = if(scan2) View.VISIBLE else View.INVISIBLE
+        qr3Slash?.visibility = if(scan3) View.VISIBLE else View.INVISIBLE
 
         if(scan1 && scan2 && scan3) {
+            finalTime = System.currentTimeMillis()
             endGame()
-        } else {
-            qr1Slash?.visibility = if(scan1) View.VISIBLE else View.INVISIBLE
-            qr2Slash?.visibility = if(scan2) View.VISIBLE else View.INVISIBLE
-            qr3Slash?.visibility = if(scan3) View.VISIBLE else View.INVISIBLE
         }
     }
 
     private fun endGame() {
-        mHandler?.removeCallbacks(mTimerHandler)
-        val navLogin = activity as FragmentNavigation
-        navLogin.replaceFragment(LeaderboardFragment(model))
+        val urlStart = URL("http://" +
+                model.getIP() + ":" +
+                model.getPort() +
+                "/capture_the_flag/end_game?" +
+                "session_id=" + roomCode)
+        val response = StringBuffer()
+
+        with(urlStart.openConnection() as HttpURLConnection) {
+            requestMethod = "GET"  // optional default is GET
+
+            Log.i(TAG,"Sent 'GET' request to URL : $urlStart; Response Code : $responseCode")
+
+            inputStream.bufferedReader().use {
+                var inputLine = it.readLine()
+                while (inputLine != null) {
+                    response.append(inputLine)
+                    inputLine = it.readLine()
+                }
+                Log.i(TAG,"Response : $response")
+            }
+        }
+        if(response.toString().toInt() > 0) {
+            // Game has ended
+            mHandler?.removeCallbacks(mTimerHandler)
+            val navLogin = activity as FragmentNavigation
+            navLogin.replaceFragment(LeaderboardFragment(model, finalTime, roomCode))
+        }
     }
 
     private fun startClock() {

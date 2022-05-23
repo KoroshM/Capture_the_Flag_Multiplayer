@@ -15,7 +15,9 @@ import com.google.zxing.integration.android.IntentIntegrator
 import java.util.logging.Logger
 
 
-class LeaderboardFragment(private val model: MyViewModel) : Fragment(R.layout.leaderboard)  {
+class LeaderboardFragment(private val model: MyViewModel,
+                          private val time: Long,
+                          private val roomCode: String) : Fragment(R.layout.leaderboard)  {
 
     private val TAG = "PostGame"
     private var textCountry: TextView? = null

@@ -1,16 +1,15 @@
 package uwb.css533.capturetheflag
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class CreateRoomFragment(private val model: MyViewModel, private val roomCode: String) : Fragment(R.layout.create_screen)  {
@@ -32,30 +31,51 @@ class CreateRoomFragment(private val model: MyViewModel, private val roomCode: S
         btnStart = returnView.findViewById<Button>(R.id.frag_button_start)
 
         textCodeDisplay?.text = roomCode
-        textSearching?.visibility = View.VISIBLE
-        btnStart?.visibility = View.GONE
-
-        var fullLobby = 0
-        while(fullLobby == 0) {
-            // TODO: Heartbeat to check if game started
-            val response = "1" // ------------------------------- GS returns full or not 1/0
-            fullLobby = response.toInt()
-        }
-        textSearching?.visibility = View.INVISIBLE
         btnStart?.visibility = View.VISIBLE
 
         btnStart?.setOnClickListener {
-            var start = "0" // Starts at 0, should be set to whatever the start time was of the room timer
-            while(start == "0") {
-                // TODO: Heartbeat to check if game started
-                val response = System.currentTimeMillis().toString() // ------------------------------- GS returns 0 or start time
-                start = response
+            lateinit var lines: List<String>
+
+            val urlStart = URL("http://" +
+                    model.getIP() + ":" +
+                    model.getPort() +
+                    "/capture_the_flag/start_game?" +
+                    "user_id=" + model.getUser()?.getId() +
+                    "&session_id=" + roomCode)
+            val responseStart = StringBuffer()
+
+            with(urlStart.openConnection() as HttpURLConnection) {
+                requestMethod = "GET"  // optional default is GET
+
+                Log.i(TAG,"Sent 'GET' request to URL : $urlStart; Response Code : $responseCode")
+
+                inputStream.bufferedReader().use {
+                    var inputLine = it.readLine()
+                    while (inputLine != null) {
+                        responseStart.append(inputLine)
+                        inputLine = it.readLine()
+                    }
+                    Log.i(TAG,"Response : $responseStart")
+                }
             }
-            textSearching?.text = R.string.starting_game.toString()
-            textSearching?.visibility = View.VISIBLE
+
+            /** Response
+             * Country
+             * (QR1)Feature1
+             * (QR2)Feature2
+             * (QR3)Feature3
+             * (Start time)
+             */
+            lines = responseStart.lines()
 
             val navLogin = activity as FragmentNavigation
-            navLogin.replaceFragment(GameFragment(model, start))
+            navLogin.replaceFragment(GameFragment(model,
+                lines[0],
+                lines[1],
+                lines[2],
+                lines[3],
+                lines[4],
+                roomCode))
         }
 
         return returnView

@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activity_signedin)  {
@@ -23,9 +24,9 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
     ): View? {
         Log.i(TAG,"Entering SignedIn Fragment")
         // Inflate the layout for this fragment
-        val returnView = inflater.inflate(R.layout.activity_signedin, container, false)
-        btnCreate = returnView.findViewById<Button>(R.id.frag_button_create)
-        btnJoin = returnView.findViewById<Button>(R.id.frag_button_join)
+        val view = inflater.inflate(R.layout.activity_signedin, container, false)
+        btnCreate = view.findViewById<Button>(R.id.frag_button_create)
+        btnJoin = view.findViewById<Button>(R.id.frag_button_join)
 
         btnCreate?.setOnClickListener {
             val roomCode = createRoom(model.getUser())
@@ -43,7 +44,7 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
             navLogin.replaceFragment(JoinRoomFragment(model))
         }
 
-        return returnView
+        return view
     }
 
     private fun createRoom(user: User?): String {
@@ -51,9 +52,27 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
             return "-1"
         }
 
-        // TODO: Implement room creation
-        val response = "12345"
+        val url = URL("http://" +
+                model.getIP() + ":" +
+                model.getPort() +
+                "/capture_the_flag/new_room?" +
+                "user_id=" + model.getUser()?.getId())
+        val response = StringBuffer()
 
-        return response
+        with(url.openConnection() as HttpURLConnection) {
+            requestMethod = "GET"  // optional default is GET
+
+            Log.i(TAG,"Sent 'GET' request to URL : $url; Response Code : $responseCode")
+
+            inputStream.bufferedReader().use {
+                var inputLine = it.readLine()
+                while (inputLine != null) {
+                    response.append(inputLine)
+                    inputLine = it.readLine()
+                }
+                Log.i(TAG,"Response : $response")
+            }
+        }
+        return response.toString()
     }
 }
