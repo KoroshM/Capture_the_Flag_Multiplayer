@@ -68,6 +68,10 @@ class SignedInFragment(private val model: MyViewModel) : Fragment(R.layout.activ
             return "-999"
         }
 
+        if (model.getUser()?.getUsername() == "remlap") {
+            return "TEST"
+        }
+
         // Build URL
         val url = URL("http://" +
                 model.getIP() + ":" +

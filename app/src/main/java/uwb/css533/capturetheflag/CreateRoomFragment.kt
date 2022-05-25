@@ -39,7 +39,15 @@ class CreateRoomFragment(private val model: MyViewModel) : Fragment(R.layout.cre
 
         // Send a request to begin the game to the server
         btnStart?.setOnClickListener {
-            if (model.getUser()?.getUsername() != "remlap") {
+            if (model.getUser()?.getUsername() == "remlap") {
+                val navLogin = activity as FragmentNavigation
+                navLogin.replaceFragment(GameFragment(model,
+                        "US",               // Country
+                        "1RedStripes",     // [QR1]Feature1
+                        "2WhiteStripes",   // [QR2]Feature2
+                        "3Stars",          // [QR3]Feature3
+                        System.currentTimeMillis())) // Start time in ms
+            } else {
                 // Build URL
                 val url = URL(
                     "http://" +
@@ -86,14 +94,6 @@ class CreateRoomFragment(private val model: MyViewModel) : Fragment(R.layout.cre
                     )
                 ) // Start time in ms
 
-            } else {
-                val navLogin = activity as FragmentNavigation
-                navLogin.replaceFragment(GameFragment(model,
-                    "US",               // Country
-                    "1RedStripes",     // [QR1]Feature1
-                    "2WhiteStripes",   // [QR2]Feature2
-                    "3Stars",          // [QR3]Feature3
-                    System.currentTimeMillis())) // Start time in ms
             }
         }
 
