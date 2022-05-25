@@ -1,5 +1,6 @@
 package uwb.css533.capturetheflag
 
+// Class to store a list of supported Countries for the game and a couple getter methods
 class Atlas {
     // Supported Countries (Code, Name)
     private val atlas: List<Country> = listOf(
@@ -35,6 +36,7 @@ class Atlas {
         return atlas.random()
     }
 
+    // Get a Country object based on its Code or Name
     fun get(country: String): Country? {
         for(item in atlas) {
             if(item.getCode() == country || item.getName() == country)

@@ -6,7 +6,6 @@
     android:background="@color/teal_700">
 
     <TextView
-        android:id="@+id/frag_textview_join_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sessionID_prompt"

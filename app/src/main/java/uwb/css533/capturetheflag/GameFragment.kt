@@ -1,11 +1,9 @@
 package uwb.css533.capturetheflag
 
 import android.content.Intent
-import android.icu.util.TimeUnit
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,18 +14,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
-import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
-
+// The fragment that runs the active game in progress
 class GameFragment(private val model: MyViewModel,
                    private val flag: String,
                    private val feat1: String,
@@ -47,17 +41,17 @@ class GameFragment(private val model: MyViewModel,
     private var qr1Slash: View? = null
     private var qr2Slash: View? = null
     private var qr3Slash: View? = null
-    private var qr1: String? = null
-    private var qr2: String? = null
-    private var qr3: String? = null
     private var scan1 = false
     private var scan2 = false
     private var scan3 = false
 
-    private val timerInterval = 1000L // Timer update in ms
-    private var mHandler: Handler? = null
-    private var finalTime = Long.MAX_VALUE
+    private val timerInterval = 1000L       // Timer update in ms
+    private var mHandler: Handler? = null   // Manages the timer
+    private var winTime = Long.MAX_VALUE    // Winner's time-to-finish
+    private var bestTime = Long.MAX_VALUE   // Leaderboard's top time-to-finish
+    private var finalTime = Long.MAX_VALUE  // Player's time-to-finish
 
+    // Timer method as an object
     private var mTimerHandler: Runnable = object : Runnable {
         override fun run() {
             try {
@@ -68,6 +62,7 @@ class GameFragment(private val model: MyViewModel,
         }
     }
 
+    // Main method
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -89,8 +84,9 @@ class GameFragment(private val model: MyViewModel,
         qr2Slash = view.findViewById(R.id.frag_qr2_slash)
         qr3Slash = view.findViewById(R.id.frag_qr3_slash)
 
+        // Set the flag and start the timer
         if(country == null) {
-            Log.e(TAG,"Error loading flag from server.")
+            Log.e(TAG,"Flag not supported by client.")
             return view
         } else {
             Backend.setFlag(imgFlag, country)
@@ -98,14 +94,12 @@ class GameFragment(private val model: MyViewModel,
             startClock()
         }
 
-        qr1 = feat1[0].toString()
-        qr2 = feat2[0].toString()
-        qr3 = feat3[0].toString()
-        textQr1?.text = qr1
-        textQr2?.text = qr2
-        textQr3?.text = qr3
+        // Inputs have first char as the QR# and the rest as the feature description (not used)
+        textQr1?.text = feat1[0].toString()
+        textQr2?.text = feat2[0].toString()
+        textQr3?.text = feat3[0].toString()
 
-        startClock()
+        // Start a QR scan
         btnScan?.setOnClickListener {
             val intentIntegrator = IntentIntegrator.forSupportFragment(this)
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
@@ -115,17 +109,20 @@ class GameFragment(private val model: MyViewModel,
         return view
     }
 
+    // Get the response from a QR scan
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
+        // Parse the result
         if (result != null) {
             if (result.contents == null) {
                 Log.e(TAG,"Cancelled")
                 Toast.makeText(activity, "QR scan cancelled.", Toast.LENGTH_LONG).show()
             } else {
                 Log.i(TAG,"Scan contents: " + result.contents)
-                Toast.makeText(activity, "scanned: " + result.contents, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "Scanned code: " + result.contents, Toast.LENGTH_LONG).show()
 
+                // Update client UI on a successful scan
                 updateClientGame(result.contents as String)
             }
         } else {
@@ -133,7 +130,9 @@ class GameFragment(private val model: MyViewModel,
         }
     }
 
+    // On receiving a successful QR scan check if the scanned code is correct for this flag
     private fun updateClientGame(qr: String) {
+        // Build URL
         val urlStart = URL("http://" +
                 model.getIP() + ":" +
                 model.getPort() +
@@ -143,6 +142,7 @@ class GameFragment(private val model: MyViewModel,
                 "&feature=" + qr)
         val response = StringBuffer()
 
+        // Parse response into a StringBuffer
         with(urlStart.openConnection() as HttpURLConnection) {
             requestMethod = "GET"  // optional default is GET
 
@@ -158,22 +158,39 @@ class GameFragment(private val model: MyViewModel,
             }
         }
 
+        // Response is which feature the scan corresponds to, if any
         when (response.toString()) {
-            qr1 -> scan1 = true
-            qr2 -> scan2 = true
-            qr3 -> scan3 = true
+            "1" -> scan1 = true
+            "2" -> scan2 = true
+            "3" -> scan3 = true
         }
+        // Set UI slashes
         qr1Slash?.visibility = if(scan1) View.VISIBLE else View.INVISIBLE
         qr2Slash?.visibility = if(scan2) View.VISIBLE else View.INVISIBLE
         qr3Slash?.visibility = if(scan3) View.VISIBLE else View.INVISIBLE
 
+        // Once all 3 features have been scanned call for endgame with the current time
         if(scan1 && scan2 && scan3) {
-            finalTime = System.currentTimeMillis()
-            endGame()
+            finalTime = System.currentTimeMillis()  - startTime
+            mHandler?.removeCallbacks(mTimerHandler)
+            updateStopWatchView(finalTime)
+
+            // Keep checking if game has ended
+            while(!endGame()) {}
+
+            // Game has ended
+            val navLogin = activity as FragmentNavigation
+            navLogin.replaceFragment(LeaderboardFragment(model,
+                winTime,
+                bestTime,
+                finalTime))
         }
     }
 
-    private fun endGame() {
+    // Final method called when all 3 QR codes have been scanned and verified
+    // Navigates to LeaderboardFragment
+    private fun endGame(): Boolean {
+        // Build URL
         val urlStart = URL("http://" +
                 model.getIP() + ":" +
                 model.getPort() +
@@ -181,8 +198,9 @@ class GameFragment(private val model: MyViewModel,
                 "session_id=" + model.getSessionId())
         val response = StringBuffer()
 
+        // Parse response into a StringBuffer
         with(urlStart.openConnection() as HttpURLConnection) {
-            requestMethod = "GET"  // optional default is GET
+            requestMethod = "GET"  // optional, default is GET
 
             Log.i(TAG,"Sent 'GET' request to URL : $urlStart; Response Code : $responseCode")
 
@@ -195,28 +213,36 @@ class GameFragment(private val model: MyViewModel,
                 Log.i(TAG,"Response : $response")
             }
         }
+
+        /** Response
+         * WinnerTime,BestTime
+         */
         val lines = response.split(",").toTypedArray()
-        if(lines[0].toInt() > 0) {
-            // Game has ended
-            mHandler?.removeCallbacks(mTimerHandler)
-            val navLogin = activity as FragmentNavigation
-            navLogin.replaceFragment(LeaderboardFragment(model,
-                lines[0].toLong() - startTime,
-                lines[1].toLong() - startTime,
-                finalTime - startTime))
+
+        // If a positive value is received then the game has ended
+        return if(lines[0].toInt() > 0) {
+            winTime = lines[0].toLong()
+            bestTime = lines[1].toLong()
+            true
+
+        } else {
+            false
         }
     }
 
+    // Start the timer
     private fun startClock() {
         mHandler = Handler(Looper.getMainLooper())
         mTimerHandler.run()
     }
 
+    // Update the timer ImageView with the current time elapsed
     private fun updateStopWatchView(milliseconds: Long) {
         val formattedTime = getFormattedStopWatch(milliseconds)
         textTime?.text = formattedTime
     }
 
+    // Format time in ms to a string of HH : MM : SS
     private fun getFormattedStopWatch(milliseconds: Long): String {
         var ms = milliseconds
         val hours = ms.milliseconds.inWholeHours

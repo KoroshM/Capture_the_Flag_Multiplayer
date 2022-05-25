@@ -1,7 +1,5 @@
 package uwb.css533.capturetheflag
 
-import android.R.attr
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,16 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.zxing.integration.android.IntentIntegrator
-import java.util.logging.Logger
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-
+// Final fragment in the loop, displays game results and navigates back to SignedInFragment
 class LeaderboardFragment(private val model: MyViewModel,
                           private val winTime: Long,
                           private val bestTime: Long,
@@ -30,25 +25,25 @@ class LeaderboardFragment(private val model: MyViewModel,
     private var textTimeUsr: TextView? = null
     private var btnBack: Button? = null
 
+    // Main method
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i(TAG,"Entering post-game screen.")
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.game, container, false)
+        val view = inflater.inflate(R.layout.leaderboard, container, false)
 
         textTimeTop = view.findViewById(R.id.frag_textview_lb_time_top)
-        val textTimeTopDesc = view.findViewById<TextView>(R.id.textview_score1)
         textTimeWin = view.findViewById(R.id.frag_textview_lb_time_winner)
         textTimeUsr = view.findViewById(R.id.frag_textview_lb_time_player)
         btnBack = view.findViewById(R.id.frag_button_return)
-
-        textTimeTopDesc.visibility = View.INVISIBLE
 
         textTimeTop?.text = getFormattedStopWatch(bestTime)
         textTimeWin?.text = getFormattedStopWatch(winTime)
         textTimeUsr?.text = getFormattedStopWatch(finalTime)
 
+        // Return to SignedInFragment (Create/Join room screen)
         btnBack?.setOnClickListener {
             model.clearSessionId()
             val navLogin = activity as FragmentNavigation
@@ -58,6 +53,7 @@ class LeaderboardFragment(private val model: MyViewModel,
         return view
     }
 
+    // Format time in ms to a string of HH : MM : SS
     private fun getFormattedStopWatch(milliseconds: Long): String {
         var ms = milliseconds
         val hours = ms.milliseconds.inWholeHours

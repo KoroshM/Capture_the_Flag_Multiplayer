@@ -1,8 +1,6 @@
 package uwb.css533.capturetheflag
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-
+// Class used to store player account info, mostly relevant for the secret user ID
 class User(user: String, pass: String, id: String) {
     private val username: String = user
     private val password: String = pass

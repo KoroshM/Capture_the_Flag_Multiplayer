@@ -1,15 +1,18 @@
 package uwb.css533.capturetheflag
 
-import android.widget.Button
-import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MyViewModel(private val ip: String, private val port: Int) : ViewModel() {
+// Class used to store data from fragment to fragment
+class MyViewModel(private val ip: String,
+                  private val port: Int) : ViewModel() {
 
+    // Currently active session ID, null unless actively in a game
     private var room: String? = null
+    // User object storing player's credentials
     private var user: User? = null
+    // Whether the user is signed in
     private var _auth = MutableLiveData(false)
     var auth: LiveData<Boolean> = _auth
 

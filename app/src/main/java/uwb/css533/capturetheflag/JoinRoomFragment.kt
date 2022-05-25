@@ -1,8 +1,6 @@
 package uwb.css533.capturetheflag
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +13,8 @@ import androidx.fragment.app.Fragment
 import java.net.HttpURLConnection
 import java.net.URL
 
-
+// Fragment that requests the user credentials be assigned to a given room
+// Navigates to GameFragment on success
 class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_screen)  {
 
     private val TAG = "Join"
@@ -23,6 +22,7 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
     private var btnSearch: Button? = null
     private var textFound: TextView? = null
 
+    // Main method
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,10 +30,12 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
         Log.i(TAG,"Entering Join Fragment")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.activity_signedin, container, false)
+
         roomId = view.findViewById(R.id.frag_edittext_sessionID)
         btnSearch = view.findViewById(R.id.frag_button_search)
         textFound = view.findViewById(R.id.frag_textview_found)
 
+        // Attempt to join the input room number
         btnSearch?.setOnClickListener {
             val roomCode = roomId?.text
             if(roomCode != null) {
@@ -46,10 +48,9 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
                         "&session_id=" + roomCode)
                 val response = StringBuffer()
 
-
-
+                // Parse response into a StringBuffer
                 with(url.openConnection() as HttpURLConnection) {
-                    requestMethod = "GET"  // optional default is GET
+                    requestMethod = "GET"  // optional, default is GET
 
                     Log.i(TAG,"Sent 'GET' request to URL : $url; Response Code : $responseCode")
 
@@ -63,25 +64,25 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
                     }
                 }
 
-                /** Response **
-                 * Country
-                 * (QR)Feature1
-                 * (QR)Feature2
-                 * (QR)Feature3
-                 * (Start time)
-                 */
-                val lines = response.split(",").toTypedArray()
+                if(!response.toString().startsWith("-")) {
+                    /** Response
+                     * Country,(QR1)Feature1,(QR2)Feature2,(QR3)Feature3,(Start time)
+                     */
+                    // Store response into an array of parameters
+                    val lines = response.split(",").toTypedArray()
 
-                val navLogin = activity as FragmentNavigation
-                navLogin.replaceFragment(GameFragment(model,
-                    lines[0],
-                    lines[1],
-                    lines[2],
-                    lines[3],
-                    lines[4].toLong()))
+                    // Begin the game
+                    val navLogin = activity as FragmentNavigation
+                    navLogin.replaceFragment(GameFragment(model,
+                            lines[0],   // Country
+                            lines[1],   // [QR1]Feature1
+                            lines[2],   // [QR2]Feature2
+                            lines[3],   // [QR3]Feature3
+                            lines[4].toLong())) // Start time in ms
+                }
+            } else {
+                Log.e(TAG, "Error joining room: null room code input")
             }
-
-            Log.e(TAG, "Error joining room: null room code input")
             Toast.makeText(activity,"Invalid room code, please try again.",Toast.LENGTH_SHORT).show()
         }
 

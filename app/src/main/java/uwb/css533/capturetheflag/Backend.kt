@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import com.squareup.picasso.Picasso
 
+// Run certain tasks in the background to free up the UI thread
 object Backend {
     private const val TAG = "Backend"
     private val atlas = Atlas()                 // Class with pre-made list of countries

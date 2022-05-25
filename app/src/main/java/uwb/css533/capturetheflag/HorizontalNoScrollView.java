@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 
+// Custom version of HorizontalScrollView that does not allow user-input scrolling
 public class HorizontalNoScrollView extends HorizontalScrollView {
     public HorizontalNoScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
