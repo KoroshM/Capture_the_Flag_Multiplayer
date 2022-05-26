@@ -40,16 +40,16 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
             val roomCode = roomId?.text
             if(roomCode != null) {
                 // Join room
-                val url = URL("http://" +
+                val url1 = URL("http://" +
                         model.getIP() + ":" +
                         model.getPort() +
                         "/capture_the_flag/join?" +
                         "user_id=" + model.getUser()?.getId() +
                         "&session_id=" + roomCode)
-                val response = StringBuffer()
+                val response1 = StringBuffer()
 
                 // Parse response into a StringBuffer
-                with(url.openConnection() as HttpURLConnection) {
+                with(url1.openConnection() as HttpURLConnection) {
                     requestMethod = "GET"  // optional, default is GET
 
                     Log.i(TAG,"Sent 'GET' request to URL : $url; Response Code : $responseCode")
@@ -57,19 +57,46 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
                     inputStream.bufferedReader().use {
                         var inputLine = it.readLine()
                         while (inputLine != null) {
-                            response.append(inputLine)
+                            response1.append(inputLine)
                             inputLine = it.readLine()
                         }
-                        Log.i(TAG,"Response : $response")
+                        Log.i(TAG,"Response : $response1")
                     }
                 }
 
-                if(!response.toString().startsWith("-")) {
+                if(!response1.toString().startsWith("-")) {
+                    // Build URL
+                    val url2 = URL(
+                        "http://" +
+                                model.getIP() + ":" +
+                                model.getPort() +
+                                "/capture_the_flag/start_game?" +
+                                "user_id=" + model.getUser()?.getId() +
+                                "&session_id=" + model.getSessionId()
+                    )
+                    val response2 = StringBuffer()
+
+                    // Parse response into a StringBuffer
+                    with(url2.openConnection() as HttpURLConnection) {
+                        requestMethod = "GET"  // optional, default is GET
+
+                        Log.i(TAG, "Sent 'GET' request to URL : $url; Response Code : $responseCode")
+
+                        inputStream.bufferedReader().use {
+                            var inputLine = it.readLine()
+                            while (inputLine != null) {
+                                response2.append(inputLine)
+                                inputLine = it.readLine()
+                            }
+                            Log.i(TAG, "Response : $response2")
+                        }
+                    }
+
                     /** Response
                      * Country,(QR1)Feature1,(QR2)Feature2,(QR3)Feature3,(Start time)
                      */
                     // Store response into an array of parameters
-                    val lines = response.split(",").toTypedArray()
+                    val lines = response2.split(",").toTypedArray()
 
                     // Begin the game
                     val navLogin = activity as FragmentNavigation
@@ -79,6 +106,9 @@ class JoinRoomFragment(private val model: MyViewModel) : Fragment(R.layout.join_
                             lines[2],   // [QR2]Feature2
                             lines[3],   // [QR3]Feature3
                             lines[4].toLong())) // Start time in ms
+
+                } else {
+                    Log.e(TAG,"Error joining room: room does not exist")
                 }
             } else {
                 Log.e(TAG, "Error joining room: null room code input")

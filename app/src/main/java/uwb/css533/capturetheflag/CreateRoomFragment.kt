@@ -90,9 +90,7 @@ class CreateRoomFragment(private val model: MyViewModel) : Fragment(R.layout.cre
                         lines[1],   // [QR1]Feature1
                         lines[2],   // [QR2]Feature2
                         lines[3],   // [QR3]Feature3
-                        lines[4].toLong()
-                    )
-                ) // Start time in ms
+                        lines[4].toLong())) // Start time in ms
 
             }
         }
